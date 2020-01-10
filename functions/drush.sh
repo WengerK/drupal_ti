@@ -6,14 +6,22 @@
 # Ensures that the right drush version is installed.
 #
 function drupal_ti_ensure_drush() {
-	# This function is re-entrant.
-	if [ -r "$TRAVIS_BUILD_DIR/../drupal_ti-drush-installed" ]
+  # Check if drush is already available.
+	DRUSH=$(which drush || echo "")
+
+	if [ -n "$DRUSH" ]
 	then
+		echo "Drush is already installed on: $DRUSH"
+		echo "Drush version:"
+		echo "${drush --version}"
 		return
 	fi
 
-	# Check if drush is already available.
-	DRUSH=$(which drush || echo "")
+	# This function is re-entrant.
+  if [ -r "$TRAVIS_BUILD_DIR/../drupal_ti-drush-installed" ]
+	then
+		return
+	fi
 
 	if [ -z "$DRUSH" ]
 	then
