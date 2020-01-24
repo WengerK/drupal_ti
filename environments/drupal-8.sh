@@ -3,7 +3,7 @@
 # Drupal-8 environment variables and functions.
 
 function drupal_ti_install_drupal() {
-	git clone --depth 1 --branch "$DRUPAL_TI_CORE_BRANCH" http://git.drupal.org/project/drupal.git
+	git clone --depth 1 --branch "$DRUPAL_TI_CORE_BRANCH" https://git.drupalcode.org/project/drupal.git
 	cd drupal
 	composer install
 
@@ -13,13 +13,20 @@ function drupal_ti_install_drupal() {
 	  composer run-script drupal-phpunit-upgrade
 	fi
 
+	# Install Drush inside the project vendor directory since Drupal 9.
+	# @see https://github.com/drush-ops/drush/issues/4234.
+	if [ "${DRUPAL_TI_CORE_BRANCH:0:1}" -ge "9" ]
+	then
+		composer require --no-interaction "$DRUPAL_TI_DRUSH_VERSION"
+	fi
+
 	# Add extra composer dependencies when required.
 	if [ -n "$COMPOSER_EXTRA_DEPENDENCIES" ]
 	then
 		composer require $COMPOSER_EXTRA_DEPENDENCIES --no-interaction
 	fi
 
-	php -d sendmail_path=$(which true) ~/.composer/vendor/bin/drush.php --yes -v site-install "$DRUPAL_TI_INSTALL_PROFILE" --db-url="$DRUPAL_TI_DB_URL"
+	php -d sendmail_path=$(which true) ~/.composer/vendor/bin/drush --yes -v site-install "$DRUPAL_TI_INSTALL_PROFILE" --db-url="$DRUPAL_TI_DB_URL"
 	drush use $(pwd)#default
 }
 
@@ -58,7 +65,7 @@ export DRUPAL_TI_DIST_DIR="$HOME/.dist"
 export PATH="$DRUPAL_TI_DIST_DIR/usr/bin:$PATH"
 if [ -z "$DRUPAL_TI_CORE_BRANCH" ]
 then
-	export DRUPAL_TI_CORE_BRANCH="8.1.x"
+	export DRUPAL_TI_CORE_BRANCH="8.7.x"
 fi
 
 # The default folder for modules changes in 8.3.x.
