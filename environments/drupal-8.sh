@@ -13,13 +13,6 @@ function drupal_ti_install_drupal() {
 	  composer run-script drupal-phpunit-upgrade
 	fi
 
-#	# Install Drush inside the project vendor directory since Drupal 9.
-#	# @see https://github.com/drush-ops/drush/issues/4234.
-#	if [ "${DRUPAL_TI_CORE_BRANCH:0:1}" -ge "9" ]
-#	then
-#		composer require --no-interaction "$DRUPAL_TI_DRUSH_VERSION"
-#	fi
-
 	# Update PHPUnit to a specific version when required.
 	if [ -n "$DRUPAL_TI_PHPUNIT_VERSION" ]
 	then

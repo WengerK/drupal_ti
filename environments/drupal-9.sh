@@ -7,13 +7,7 @@ function drupal_ti_install_drupal() {
 	cd drupal
 	composer install
 
-	# Update to PHPUnit 7.x for Drupal from 8.6 to 8.7.
-#	if [ "${DRUPAL_TI_CORE_BRANCH:2:1}" -gt "5" ] && [ "${DRUPAL_TI_CORE_BRANCH:2:1}" -lt "8" ]
-#	then
-#	composer run-script drupal-phpunit-upgrade
-#	fi
-
-	# Install Drush inside the project vendor directory since Drupal 9.
+	# Installing Drush inside the project vendor directory is mandatory since Drupal 9.
 	# @see https://github.com/drush-ops/drush/issues/4234.
 	composer require --no-interaction "$DRUPAL_TI_DRUSH_VERSION"
 
