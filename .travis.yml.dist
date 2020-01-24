@@ -78,6 +78,9 @@ env:
     - DRUPAL_TI_BEHAT_BROWSER="firefox"
 
     # PHPUnit specific commandline arguments.
+    # Specifying the phpunit version you want to use. By default use 5.x (before Drupal 8.6.x)
+    # Then automatically update to 6.x (after Drupal 8.7.x)
+    # - DRUPAL_TI_PHPUNIT_VERSION="^7.0"
     - DRUPAL_TI_PHPUNIT_ARGS=""
     # Specifying the phpunit-core src/ directory is useful when e.g. a vendor/
     # directory is present in the module directory, which phpunit would then
